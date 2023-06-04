@@ -26,7 +26,6 @@ app.use(
 app.use(express.urlencoded({ extended: false })); // parse application/x-www-form-urlencoded
 app.use(express.static(path.join(__dirname, "public"))); //To serve static files such as images, CSS files, and JavaScript files
 //local:
-<<<<<<< HEAD
 app.use(express.static(path.join(__dirname, "dist"))); 
 //remote:
 // app.use(express.static(path.join(__dirname, '../assignment_3-3-master/dist')));
@@ -34,15 +33,6 @@ app.get("/",function(req,res)
 { 
   //remote: 
   // res.sendFile(path.join(__dirname, '../template-Assignment-3.2-main/dist/index.html'));
-=======
-app.use(express.static(path.join(__dirname, "dist")));
-//remote:
-// app.use(express.static(path.join(__dirname, '../assignment-3-3-basic/dist')));
-app.get("/",function(req,res)
-{ 
-  //remote: 
-  // res.sendFile(path.join(__dirname, '../assignment-3-3-basic/dist/index.html'));
->>>>>>> b3c6175371eb7db6219c009a6bc52a7eb3f1345f
   //local:
   res.sendFile(__dirname+"/index.html");
 
@@ -69,11 +59,8 @@ const auth = require("./routes/auth");
 //#region cookie middleware
 app.use(function (req, res, next) {
   if (req.session && req.session.user_id) {
-<<<<<<< HEAD
     DButils.execQuery("SELECT username FROM users")
-=======
-    DButils.execQuery("SELECT user_id FROM users")
->>>>>>> b3c6175371eb7db6219c009a6bc52a7eb3f1345f
+
       .then((users) => {
         if (users.find((x) => x.user_id === req.session.user_id)) {
           req.user_id = req.session.user_id;
@@ -113,8 +100,6 @@ process.on("SIGINT", function () {
   }
   process.exit();
 });
-<<<<<<< HEAD
 
 module.exports = app;
-=======
->>>>>>> b3c6175371eb7db6219c009a6bc52a7eb3f1345f
+

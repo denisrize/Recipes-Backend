@@ -1,6 +1,5 @@
 const DButils = require("./DButils");
 
-<<<<<<< HEAD
 async function getUserIDFromUsername(username){
     const user_id = await DButils.execQuery(`select user_id from users where username='${username}'`);
     return user_id;
@@ -13,10 +12,6 @@ async function markAsFavorite(user_id, recipe_id){
 
 async function deleteUserFavorite(user_id, recipe_id){
     await DButils.execQuery(`delete from favoriterecipes where user_id = '${user_id}' AND recipe_id = ${recipe_id}`); 
-=======
-async function markAsFavorite(user_id, recipe_id){
-    await DButils.execQuery(`insert into FavoriteRecipes values ('${user_id}',${recipe_id})`);
->>>>>>> b3c6175371eb7db6219c009a6bc52a7eb3f1345f
 }
 
 async function getFavoriteRecipes(user_id){
@@ -24,7 +19,6 @@ async function getFavoriteRecipes(user_id){
     return recipes_id;
 }
 
-<<<<<<< HEAD
 async function getLastViewed(user_id, number = 3){
     const recipes_id = await DButils.execQuery(`SELECT * FROM lastviewed WHERE user_id='${user_id}' order by added_timestamp desc limit ${number}`);
     return recipes_id;
@@ -107,13 +101,10 @@ async function getMyRecipeDetails(user_id, user_recipe_id, user_recipe) {
 async function deleteUserRecipe(user_id, recipe_id){
     await DButils.execQuery(`delete from myrecipes where user_id = '${user_id}' AND recipe_id = ${recipe_id}`); 
 }
-=======
->>>>>>> b3c6175371eb7db6219c009a6bc52a7eb3f1345f
 
 
 exports.markAsFavorite = markAsFavorite;
 exports.getFavoriteRecipes = getFavoriteRecipes;
-<<<<<<< HEAD
 exports.deleteUserFavorite = deleteUserFavorite;
 exports.getLastViewed = getLastViewed;
 exports.addLastViewed = addLastViewed;
@@ -125,7 +116,3 @@ exports.addInstrucitons = addInstrucitons;
 exports.addEquipments = addEquipments;
 exports.getUserIDFromUsername = getUserIDFromUsername;
 exports.deleteUserRecipe = deleteUserRecipe;
-
-
-=======
->>>>>>> b3c6175371eb7db6219c009a6bc52a7eb3f1345f
