@@ -1,5 +1,4 @@
 <<<<<<< HEAD
 =======
 [![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-718a45dd9cf7e7f842a935f5ebbe5719a5e09af4491e668f4dbf3b35d5cca122.svg)](https://classroom.github.com/online_ide?assignment_repo_id=11160521&assignment_repo_type=AssignmentRepo)
->>>>>>> b3c6175371eb7db6219c009a6bc52a7eb3f1345f
-
+Denis Rize - 316476431 and Lior Tkach - 208892166.
