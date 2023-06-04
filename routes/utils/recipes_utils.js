@@ -18,6 +18,7 @@ async function getRecipeInformation(recipe_id) {
     });
 }
 
+<<<<<<< HEAD
 async function getRandomRecipeInformation(num) {
     return await axios.get(`${api_domain}/random`, {
         params: {
@@ -109,6 +110,8 @@ async function getSearchRecipeDetails(params, numberOfResults) {
     }
     return recipes;
 }
+=======
+>>>>>>> b3c6175371eb7db6219c009a6bc52a7eb3f1345f
 
 
 async function getRecipeDetails(recipe_id) {
@@ -123,6 +126,7 @@ async function getRecipeDetails(recipe_id) {
         popularity: aggregateLikes,
         vegan: vegan,
         vegetarian: vegetarian,
+<<<<<<< HEAD
         glutenFree: glutenFree
     }
 }
@@ -170,6 +174,16 @@ exports.getRecipesDetails = getRecipesDetails;
 exports.getFullRecipeDetails = getFullRecipeDetails;
 exports.getRandomRecipeDetails = getRandomRecipeDetails;
 exports.getSearchRecipeDetails = getSearchRecipeDetails;
+=======
+        glutenFree: glutenFree,
+        
+    }
+}
+
+
+
+exports.getRecipeDetails = getRecipeDetails;
+>>>>>>> b3c6175371eb7db6219c009a6bc52a7eb3f1345f
 
 
 

@@ -6,6 +6,7 @@ router.get("/", (req, res) => res.send("im here"));
 
 
 /**
+<<<<<<< HEAD
  * This path returns a full details of a random number of recipes if full = true or else return preview
  */
 router.get("/random", async (req, res, next) => {
@@ -65,6 +66,12 @@ router.get("/:recipeId", async (req, res, next) => {
       const recipe = await recipes_utils.getFullRecipeDetails(req.params.recipeId);
       res.send(recipe);
     }
+=======
+ * This path returns a full details of a recipe by its id
+ */
+router.get("/:recipeId", async (req, res, next) => {
+  try {
+>>>>>>> b3c6175371eb7db6219c009a6bc52a7eb3f1345f
     const recipe = await recipes_utils.getRecipeDetails(req.params.recipeId);
     res.send(recipe);
   } catch (error) {
@@ -72,6 +79,9 @@ router.get("/:recipeId", async (req, res, next) => {
   }
 });
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> b3c6175371eb7db6219c009a6bc52a7eb3f1345f
 module.exports = router;

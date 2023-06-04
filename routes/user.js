@@ -3,8 +3,11 @@ var router = express.Router();
 const DButils = require("./utils/DButils");
 const user_utils = require("./utils/user_utils");
 const recipe_utils = require("./utils/recipes_utils");
+<<<<<<< HEAD
 const e = require("express");
 const { Time } = require("mssql");
+=======
+>>>>>>> b3c6175371eb7db6219c009a6bc52a7eb3f1345f
 
 /**
  * Authenticate all incoming requests by middleware
@@ -22,10 +25,15 @@ router.use(async function (req, res, next) {
   }
 });
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> b3c6175371eb7db6219c009a6bc52a7eb3f1345f
 /**
  * This path gets body with recipeId and save this recipe in the favorites list of the logged-in user
  */
 router.post('/favorites', async (req,res,next) => {
+<<<<<<< HEAD
   
   try{
     const user_id = req.session.user_id;
@@ -40,28 +48,47 @@ router.post('/favorites', async (req,res,next) => {
     if(result.length > 0)
       throw { status: 400, message: `A recipe with the id ${recipe_id} already saved as favorite for ${user_id}.` };
 
+=======
+  try{
+    const user_id = req.session.user_id;
+    const recipe_id = req.body.recipeId;
+>>>>>>> b3c6175371eb7db6219c009a6bc52a7eb3f1345f
     await user_utils.markAsFavorite(user_id,recipe_id);
     res.status(200).send("The Recipe successfully saved as favorite");
     } catch(error){
     next(error);
   }
 })
+<<<<<<< HEAD
 /*
+=======
+
+/**
+>>>>>>> b3c6175371eb7db6219c009a6bc52a7eb3f1345f
  * This path returns the favorites recipes that were saved by the logged-in user
  */
 router.get('/favorites', async (req,res,next) => {
   try{
     const user_id = req.session.user_id;
+<<<<<<< HEAD
     // let favorite_recipes = {};
     const recipes_id = await user_utils.getFavoriteRecipes(user_id);
     let recipes_id_array = [];
     recipes_id.map((element) => recipes_id_array.push(element.recipe_id)); //extracting the recipe ids into array
     const results = await recipe_utils.getRecipesDetails(recipes_id_array);
+=======
+    let favorite_recipes = {};
+    const recipes_id = await user_utils.getFavoriteRecipes(user_id);
+    let recipes_id_array = [];
+    recipes_id.map((element) => recipes_id_array.push(element.recipe_id)); //extracting the recipe ids into array
+    const results = await recipe_utils.getRecipesPreview(recipes_id_array);
+>>>>>>> b3c6175371eb7db6219c009a6bc52a7eb3f1345f
     res.status(200).send(results);
   } catch(error){
     next(error); 
   }
 });
+<<<<<<< HEAD
 /*
 Deletes From user's favorites
 */
@@ -215,5 +242,10 @@ router.delete('/my-recipes', async (req,res,next) => {
     next(error); 
   }
 });
+=======
+
+
+
+>>>>>>> b3c6175371eb7db6219c009a6bc52a7eb3f1345f
 
 module.exports = router;
