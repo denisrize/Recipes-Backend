@@ -481,13 +481,19 @@ components:
       description: Model containing only the recipe preview 
       type: object
       required:
+        - id
         - title
         - image
-        - time
-        - popularity
+        - readyInMinutes
+        - aggregateLikes
         - vegan
+        - vegetarian
         - glutenFree
       properties:
+        id: 
+          type: integer
+          description: id of the recipe
+          exampe: 779
         title:
           type: string
           description: recipe title name
@@ -497,17 +503,20 @@ components:
           description: recipe image
           format: URL
           example: https://spoonacular.com/recipeimages/655455-566x370.jpg
-        time:
+        readyInMinutes:
           type: integer
           description: the time in minutes that takes to make the recipe
           example: 20
-        popularity:
+        aggregateLikes:
           type: integer
           description: amout of like the recipe got
           example: 7
         vegan:
           type: boolean
-          description: does the recipe is vegan        
+          description: does the recipe is vegan
+        vegetarian:
+          type: boolean
+          description: does the recipe is vegetarian        
         glutenFree:
           type: boolean
           description:  does the recipe is vegetrian
@@ -595,7 +604,6 @@ components:
         - $ref: '#/components/schemas/RecipePreView'
         - type: object
           properties:
-          
             ingredients: 
               type: array
               items:
@@ -646,7 +654,7 @@ components:
         - title
         - image
         - readyInMinutes
-        - popularity
+        - aggregateLikes
         - vegan
         - glutenFree
       properties:
@@ -663,6 +671,10 @@ components:
           type: integer
           description: the time in minutes that takes to make the recipe
           example: 20
+        aggregateLikes:
+          type: integer
+          description: the amount of likes given to the recipe.
+          example: 20          
         vegan:
           type: boolean
           description: does the recipe is vegan        

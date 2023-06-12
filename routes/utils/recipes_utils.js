@@ -42,7 +42,7 @@ async function getFullRecipeDetails(recipe_id) {
         title: title,
         readyInMinutes: readyInMinutes,
         image: image,
-        popularity: aggregateLikes,
+        aggregateLikes: aggregateLikes,
         vegan: vegan,
         vegetarian: vegetarian,
         glutenFree: glutenFree,
@@ -56,7 +56,6 @@ async function getFullRecipeDetails(recipe_id) {
 
 async function getRandomRecipeDetails(number) {
     let recipe_info = await getRandomRecipeInformation(number);
-    console.log('The recipe info: ', recipe_info)
     recipes = [];
     for (let i = 0; i < number; i++) {
         let { id, title, readyInMinutes, image, aggregateLikes, vegan, vegetarian, glutenFree } = recipe_info.data.recipes[i];
@@ -98,7 +97,7 @@ async function getSearchRecipeDetails(params, numberOfResults) {
             title: title,
             readyInMinutes: readyInMinutes,
             image: image,
-            popularity: aggregateLikes,
+            aggregateLikes: aggregateLikes,
             vegan: vegan,
             vegetarian: vegetarian,
             glutenFree: glutenFree,
@@ -120,7 +119,7 @@ async function getRecipeDetails(recipe_id) {
         title: title,
         readyInMinutes: readyInMinutes,
         image: image,
-        popularity: aggregateLikes,
+        aggregateLikes: aggregateLikes,
         vegan: vegan,
         vegetarian: vegetarian,
         glutenFree: glutenFree
@@ -131,7 +130,6 @@ async function getRecipesDetails(recipes_id_list){
     let recipes_preview = [];
     for(let i=0; i<recipes_id_list.length; i++){
         let recipe_info = await getRecipeDetails(recipes_id_list[i]);
-        console.log(recipe_info)
         recipes_preview.push(recipe_info);
     }
     return recipes_preview;

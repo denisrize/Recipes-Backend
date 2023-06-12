@@ -79,8 +79,8 @@ async function getMyRecipeDetails(user_id, user_recipe_id, user_recipe) {
       RecipePreView: {
         title: user_recipe.title,
         image: user_recipe.image,
-        time: user_recipe.time,
-        popularity: user_recipe.popularity,
+        readyInMinutes: user_recipe.time,
+        aggregateLikes: user_recipe.popularity,
         vegan: user_recipe.vegan,
         glutenFree: user_recipe.glutenFree,
       },
