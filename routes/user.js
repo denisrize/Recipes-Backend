@@ -60,6 +60,10 @@ router.get('/favorites', async (req,res,next) => {
     let recipes_id_array = [];
     recipes_id.map((element) => recipes_id_array.push(element.recipe_id)); //extracting the recipe ids into array
     const results = await recipe_utils.getRecipesDetails(recipes_id_array);
+    for (let recipe of results) {
+      recipe.viewed = await user_utils.checkIfViewed(req.session.user_id, recipe.id);
+      recipe.favorite = true;
+    }
     res.status(200).send(results);
   } catch(error){
     next(error); 
@@ -120,6 +124,10 @@ router.get('/last-view', async (req,res,next) => {
     let recipes_id_array = [];
     recipes_id.map((element) => recipes_id_array.push(element.recipe_id)); //extracting the recipe ids into array
     const results = await recipe_utils.getRecipesDetails(recipes_id_array);
+    for (let recipe of results) {
+      recipe.viewed = true;
+      recipe.favorite = await user_utils.checkIfFavorite(req.session.user_id, recipe.id);
+    }
     res.status(200).send(results);
   } catch(error){
     next(error); 
@@ -130,6 +138,7 @@ Add user's last view
 */
 router.post("/my-recipes", async (req, res, next) => {
   try {
+    console.log(req.body)
     // parameters exists
     // valid parameters
     // username exists
@@ -141,10 +150,13 @@ router.post("/my-recipes", async (req, res, next) => {
       popularity: '0',
       vegan: req.body.vegan,
       glutenFree: req.body.glutenFree,
+      viewed: req.body.viewed,
+      favorite: req.body.favorite,
       ingredients: req.body.ingredients,
       instructions: req.body.instructions,
       numberOfPortions: req.body.numberOfPortions,
       equipments: req.body.equipment,
+      summary: req.body.summary,
     }
 
     const user_id = req.session.user_id;
@@ -154,11 +166,12 @@ router.post("/my-recipes", async (req, res, next) => {
 
     const count = (await DButils.execQuery(`SELECT COUNT(*) AS count FROM myrecipes WHERE user_id = '${req.session.user_id}';`)); 
     const recipe_id = parseInt(count[0].count) + 1;
+    console.log("Recipe details before going in: ", recipe_details)
 
     console.log("Recipe ID after SQL: ", recipe_id)
     await user_utils.addUserRecipe(user_id, recipe_id, recipe_details.name, recipe_details.picture,
     recipe_details.time, recipe_details.popularity, recipe_details.vegan, 
-    recipe_details.glutenFree, recipe_details.numberOfPortions)
+    recipe_details.glutenFree, recipe_details.numberOfPortions, recipe_details.summary)
     
     // Add all the ingredients to the ingredients table
     for (var i = 0; i < recipe_details.ingredients.length; i++) {
@@ -172,12 +185,16 @@ router.post("/my-recipes", async (req, res, next) => {
       await user_utils.addIngredients(user_id, recipe_id, i+1, name, amount, unit, description)
     }
 
+    console.log(recipe_details.instructions)
+
     // Add all the instructions
     for (var i = 0; i < recipe_details.instructions.length; i++) {
       var instruction = recipe_details.instructions[i]
         
       await user_utils.addInstrucitons(user_id, recipe_id, i+1, instruction)
     }
+    
+    console.log(recipe_details.equipments)
 
     // Add all the equipments
     for (var i = 0; i < recipe_details.equipments.length; i++) {
@@ -201,6 +218,21 @@ router.get('/my-recipes', async (req,res,next) => {
     const user_id = req.session.user_id;
     const results = await user_utils.getUserRecipes(user_id);
     res.status(200).send(results);
+    console.log(results)
+  } catch(error){
+    next(error); 
+  }
+});
+/*
+Get user's Specific Recipe
+*/
+router.get('/my-recipes/:recipeId', async (req,res,next) => {
+  try{
+    const user_id = req.session.user_id;
+    const recipe_id = req.params.recipeId;
+    const result = await user_utils.getUserSpecificRecipe(user_id, recipe_id);
+    res.status(200).send(result);
+    console.log(result)
   } catch(error){
     next(error); 
   }

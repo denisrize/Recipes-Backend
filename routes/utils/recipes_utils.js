@@ -34,8 +34,9 @@ async function getSearchRecipeInformation(params) {
 
 async function getFullRecipeDetails(recipe_id) {
     let recipe_info = await getRecipeInformation(recipe_id);
-    let { id, title, readyInMinutes, image, aggregateLikes, vegan, vegetarian, glutenFree, servings, analyzedInstructions, extendedIngredients } = recipe_info.data;
+    let { id, title, readyInMinutes, image, aggregateLikes, vegan, vegetarian, glutenFree, servings, analyzedInstructions, extendedIngredients, summary } = recipe_info.data;
     let {Instructions_steps, required_equipment} = extractInstructionsAndEquipment(analyzedInstructions);
+    noLinksSummary = replaceHref(summary)
     let ingredients_details = extractIngredients(extendedIngredients);
     return {
         id: id,
@@ -49,7 +50,8 @@ async function getFullRecipeDetails(recipe_id) {
         numberOfPortions: servings,
         instructions: Instructions_steps,
         equipment: required_equipment,
-        ingredients: ingredients_details
+        ingredients: ingredients_details,
+        summary: noLinksSummary
         
     }
 }
@@ -136,30 +138,41 @@ async function getRecipesDetails(recipes_id_list){
 }
 
 function extractInstructionsAndEquipment(Instructions){
-    let Instructions_steps = [];
-    let equipment = {};
-    Instructions[0].steps.forEach(stepNumber => {
 
-        Instructions_steps.push(stepNumber.step);
-        stepNumber.equipment.forEach(item => {
-            equipment[item.name] = true;
+    let Instructions_steps = [];
+    let required_equipment = [];
+    if(Instructions.length){
+        let equipment = {};
+        Instructions[0].steps.forEach(stepNumber => {
+    
+            Instructions_steps.push(stepNumber.step);
+            stepNumber.equipment.forEach(item => {
+                equipment[item.name] = true;
+            });
         });
-    });
-    let required_equipment = Object.keys(equipment);
+        required_equipment = Object.keys(equipment);
+    }
+
     return { Instructions_steps,  required_equipment};
 }
 
 function extractIngredients(ingredients){
     ingredients_details = [];
-    ingredients.forEach(ingredient => {
-        ingredients_details.push({
-        name: ingredient.name,
-        amount: ingredient.amount,
-        unit: ingredient.unit,
-        description: ingredient.original
-    });
-    });
+    if(ingredients.length){
+        ingredients.forEach(ingredient => {
+            ingredients_details.push({
+            name: ingredient.name,
+            amount: ingredient.amount,
+            unit: ingredient.unit,
+            description: ingredient.original
+        });
+        });
+    }
     return ingredients_details;
+}
+
+function replaceHref(address){
+    return address.replace(/<a[^>]*>([^<]+)<\/a>/g, '$1');
 }
 
 exports.getRecipeInformation = getRecipeInformation;

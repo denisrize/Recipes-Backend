@@ -96,11 +96,13 @@ paths:
             
       responses:
         200:
-          description: return the number of last viewed pages.
+          description: return an array of the number specified last viewed pages.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RecipePreView'
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecipePreView'
         401:
           description: User is not logged in.
           content:
@@ -165,7 +167,8 @@ paths:
             
       responses:
         200:
-          description: Returned n recipes successfully.
+          description: Returned n recipes successfully.         
+           If the user is not logged in, then the recipe 'viewed','favorite' attributes will not be included.
           content:
             application/json:
               schema:
@@ -298,7 +301,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/MyRecipe'
+                  $ref: '#/components/schemas/RecipePreView'
         401:
           description: User is not logged in.
           content:
@@ -315,10 +318,10 @@ paths:
         content:
           application/json:
             schema:
-                $ref: '#/components/schemas/MyRecipe'
+                $ref: '#/components/schemas/FullRecipe'
 
       responses:
-        200:
+        201:
           description: Recipe successfully added to the user's favorites list
           content:
             application/json:
@@ -377,12 +380,34 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorMessage'
 
+  /users/my-recipes/{recipeId}:
+    get:
+      tags:
+        - users full recipe
+      summary: Get full recipe created by the user.
+      description: Return  the full recipe created by the user for the logged in user.
+      responses:
+        200:
+          description: Successfully return user recipes.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/FullRecipe'
+                  - $ref: '#/components/schemas/RecipePreView'
+        401:
+          description: User is not logged in.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage' 
+
   /recipes/{recipeId}:
     get:
       tags:
         - recipes
-      summary: Get full recipe.
-      description: Return the full recipe of the specified recipe id.
+      summary: Get the preview or the full recipe.
+      description: Return the full recipe of the specified recipe id if the full param is ture or else return the preview.
       parameters:
         - name: recipeId
           in: path
@@ -400,11 +425,16 @@ paths:
             example: true
       responses:
         200:
-          description: Successfully returned recipe.
+          description: >
+            Successfully returned recipe. If the 'full' query parameter is true, 
+            the response will match the FullRecipe schema. Otherwise, it will match 
+            the PreviewRecipe schema.If the user is not logged in, then the recipe 'viewed','favorite' attributes will not be included.
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/FullRecipe'
+                oneOf:
+                  - $ref: '#/components/schemas/FullRecipe'
+                  - $ref: '#/components/schemas/PreviewRecipe'
         401:
           description: 'There is no such user id in the system'
           content:
@@ -427,9 +457,9 @@ paths:
             type: string
             example: pasta with tuna and bamba
             
-        - name: n
+        - name: number
           in: query
-          description: number of search result to return. possible value n= 5,10,15. 
+          description: number of search result to return. possible value number = 5,10,15. 
           schema:
             type: integer
             enum: [5, 10, 15] 
@@ -457,7 +487,9 @@ paths:
             example:  gluten 
       responses:
         200:
-          description: Successfully returned n numbers of recipes matching the search.
+          description: >
+            Successfully returned n numbers of recipes matching the search.If the user is not logged in,
+            then the recipe 'viewed','favorite' attributes will not be included.
           content:
             application/json:
               schema:
@@ -514,13 +546,24 @@ components:
         vegan:
           type: boolean
           description: does the recipe is vegan
+          examle: true
         vegetarian:
           type: boolean
-          description: does the recipe is vegetarian        
+          description: does the recipe is vegetarian 
+          examle: true       
         glutenFree:
           type: boolean
           description:  does the recipe is vegetrian
-
+          examle: true
+        viewed:
+          type: boolean
+          description:  does the recipe was viewed by the user 
+          examle: true  
+        favorite:
+          type: boolean
+          description: does the recipe in the user favorites list.
+          examle: true
+     
     LoginUser:
       type: object
       properties:
@@ -646,8 +689,15 @@ components:
               items:
                 type: string
                 example: sauce pan
-                description: array of all the required equipment for the recipe.    
-    MyRecipe:
+                description: array of all the required equipment for the recipe.
+            summary:
+                type: string
+                example: Hazelnut Truffles is a hor d'oeuvre that serves 15. One portion of this dish contains around 2g of protein,
+                 6g of fat, and a total of 72 calories. For 32 cents per serving, this recipe covers 3% of your daily requirements of 
+                 vitamins and minerals. It is a good option if you're following
+                 a gluten free and lacto ovo vegetarian diet. 
+                description: Brief summary of the recipe with some additional information on the recipe.
+
       description: Model containing only the recipe preview 
       type: object
       required:

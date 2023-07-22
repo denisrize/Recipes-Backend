@@ -42,6 +42,10 @@ router.post("/Register", async (req, res, next) => {
 
 router.post("/Login", async (req, res, next) => {
   try {
+    // checks if there is user already singed in.
+    if (req.session && req.session.user_id) {
+      throw { status: 400, message: "User already sign in, logout first." };
+          }
     // check that username exists
     const users = await DButils.execQuery("SELECT username FROM users");
     if (!users.find((x) => x.username === req.body.username))
@@ -62,7 +66,8 @@ router.post("/Login", async (req, res, next) => {
     // Set cookie
     const chosen_user= await user_utils.getUserIDFromUsername(req.body.username);
     req.session.user_id = chosen_user[0].user_id;
-
+    console.log("all users: ", chosen_user)
+    console.log("user id is:", chosen_user[0].user_id)
 
     // return cookie
     res.status(200).send({ message: "login succeeded", success: true });
@@ -72,6 +77,8 @@ router.post("/Login", async (req, res, next) => {
 });
 
 router.post("/Logout", function (req, res) {
+  console.log(req.session)
+  console.log(req.session.user_id)
   if(!req.session.user_id){
     throw { status: 400, message: "User is not logged in." };
   }

@@ -29,7 +29,10 @@ const connection =  () => {
        };
        const release = () => {
          return new Promise((resolve, reject) => {
-           if (err) reject(err);
+           if (err){
+            reject(err);
+
+           } 
            console.log("MySQL pool released: threadId " + connection.threadId);
            resolve(connection.release());
          });
